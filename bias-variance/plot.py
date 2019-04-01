@@ -11,11 +11,13 @@ data = loadmat(filename)
 # Training set
 x, y = data['X'], data['y'].flatten()
 # Validation set
-Xval, yval = data['Xval'], data['yval']
+xval, yval = data['Xval'], data['yval'].flatten()
 # Test set
-Xtest, ytest = data['Xtest'], data['ytest']
+xtest, ytest = data['Xtest'], data['ytest'].flatten()
 
-# data = plt.scatter(x, y, c='r', s=25, marker='x')
+# plt.scatter(x, y, c='r', s=25, marker='x')
+# plt.scatter(xval, yval, c='g', s=25)
+# plt.scatter(xtest, ytest, c='b', s=25)
 # plt.xlabel('Change in water level (x)')
 # plt.ylabel('Water flowing out of the dam (y)')
 # plt.show()
@@ -31,10 +33,10 @@ def optimize(theta, x, y, hyper_p=0):
     return opt_theta
 
 
-opt_theta = optimize(theta, x, y, hyper_p)
-print(opt_theta)
-final = compute_cost(opt_theta, x, y, hyper_p)
-print(final)
+# opt_theta = optimize(theta, x, y, hyper_p)
+# print(opt_theta)
+# final = compute_cost(opt_theta, x, y, hyper_p)
+# print(final)
 
 
 def predict(opt_theta, x):
@@ -51,5 +53,40 @@ def plot_prediction(opt_theta, x, y):
     ax.plot(x_pred, y_pred, c='b')
 
 
-plot_prediction(opt_theta, x, y)
-plt.show()
+# plot_prediction(opt_theta, x, y)
+# plt.show()
+
+
+def plot_learning_curves(x, y, xval, yval, hyper_p=0):  # I need to review this code and try myself
+    m, n = x.shape
+    train_cost = np.zeros(m)
+    val_cost = np.zeros(m)
+    theta = np.zeros(n + 1)
+    num_samples = np.arange(m)
+
+    for i in num_samples:
+        theta = optimize(theta, x[:i + 1, :], y[:i + 1], hyper_p)
+        train_cost[i] = compute_cost(theta, x[:i + 1, :], y[:i + 1])
+        val_cost[i] = compute_cost(theta, xval, yval)
+
+    fig, ax = plt.subplots(1, figsize=(10, 6))
+    ax.plot(num_samples, train_cost, label='Training error')
+    ax.plot(num_samples, val_cost, label='Cross-Validation error')
+    ax.legend()
+    ax.set_xlabel('Number of training samples')
+    ax.set_ylabel('Error')
+    plt.show()
+
+
+plot_learning_curves(x, y, xval, yval)
+
+theta = np.zeros(x.shape[1] + 1)
+hyper_p = 0
+
+opt_theta = optimize(theta, x, y, hyper_p)
+train_cost = compute_cost(opt_theta, x, y)
+val_cost = compute_cost(opt_theta, xval, yval)
+print(train_cost, val_cost)
+
+
+
