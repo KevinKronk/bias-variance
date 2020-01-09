@@ -6,6 +6,8 @@ The curves end up close together, but at a high error. This indicates the model 
 
 ## Screenshot  
 ![image](https://user-images.githubusercontent.com/41022783/72112720-65470a00-330c-11ea-845a-4979e836dbcb.png)
+![image](https://user-images.githubusercontent.com/41022783/72113126-93791980-330d-11ea-80cb-1c8db2c82042.png)
+
 
 ## Contributing 
 Pull requests are welcome. Otherwise the project is just a demonstration. 
